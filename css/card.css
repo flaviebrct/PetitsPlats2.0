@@ -1,0 +1,88 @@
+.card {
+  width: 380px;
+  height: 731px;
+  overflow: hidden;
+  background: #FFF;
+  position: relative;
+  border-radius: 21px;
+  box-shadow: 0px 4px 34px 30px rgba(0, 0, 0, 0.04);
+}
+
+.card img {
+  width: 380px;
+  height: 253px;
+  object-fit: cover;
+  margin-bottom: 32px;
+}
+
+.card .recipe-title {
+  font-weight: 400;
+  margin-left: 25px;
+  margin-bottom: 29px;
+  color: var(--black);
+  font-size: calc(18rem/16);
+  font-family: var(--font-anton);
+}
+
+.card .card-body {
+  padding: 0 25px 61px;
+}
+
+.card .title{
+  color: var(--grey);
+  font-family: var(--font-manrope);
+  font-size: calc(12rem/16);
+  font-weight: 700;
+  letter-spacing: 1.08px;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+
+.card .recipe-container {
+  margin-bottom: 32px;
+}
+
+.card .recipe-container p {
+  color: var(--black);
+  font-family: var(--font-manrope);
+  font-size: calc(14rem/16);
+  font-weight: 400;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+}
+
+.card .ingredients-container {
+  max-height: 200px;
+}
+.card .ingredients-container ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  gap: 10px;
+}
+
+.card .ingredients-container ul li{
+  flex: 1 1 160px;
+  font-family: var(--font-manrope);
+  font-size: calc(14rem/16);
+  font-weight: 500;
+}
+
+.card .ingredients-container ul li p{
+  color: var(--grey);
+}
+
+.card .toast {
+  top: 21px;
+  right: 20px;
+  padding: 5px 15px;
+  position: absolute;
+  border-radius: 14px;
+  background-color: var(--yellow);
+  font-weight: 400;
+  font-size: calc(12rem/16);
+  font-family: var(--font-manrope);
+}

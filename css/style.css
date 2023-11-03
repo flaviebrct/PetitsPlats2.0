@@ -1,3 +1,5 @@
+@import url("card.css");
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -7,6 +9,8 @@
   --yellow : #FFD15B;
   --black : #1B1B1B;
   --white: #FFFFFF;
+  --light-grey: #EDEDED;
+  --grey: #7A7A7A;
   --font-anton : 'Anton', sans-serif;
   --font-manrope: 'Manrope', sans-serif;
 }
@@ -14,6 +18,7 @@
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  background-color: var(--light-grey);
 }
 
 img, picture, video, canvas, svg {
@@ -58,7 +63,7 @@ header .title {
   font-family: var(--font-anton);
 }
 
-header .searchbarContainer {
+header .searchbar-container {
   width: 954px;
   height: 72px;
   display: flex;
@@ -68,7 +73,7 @@ header .searchbarContainer {
   background-color: var(--white);
 }
 
-header .searchbarContainer input{
+header .searchbar-container input{
   width: 100%;
   height: 72px;
   border: none;
@@ -80,7 +85,7 @@ header .searchbarContainer input{
   padding: 24px 0 26px 35px;
 }
 
-header .searchbarContainer button {
+header .searchbar-container button {
   width: 51px;
   height: 52px;
   border: none;
@@ -90,6 +95,14 @@ header .searchbarContainer button {
   margin: 10px;
 }
 
-header .searchbarContainer button:hover {
+header .searchbar-container button:hover {
   background: var(--yellow);
+}
+
+/* ----- Card Container ----- */
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+  justify-content: center;
 }
