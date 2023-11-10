@@ -1,6 +1,27 @@
 import Card from "./template/card/index.js";
+import Filter from "./template/dropdown/index.js";
+import getIngredients from "./utils/filtersList/ingredients.js";
+import getAppliance from "./utils/filtersList/appliance.js";
+import getUstensils from "./utils/filtersList/ustensils.js";
 
 const body = document.querySelector("body");
+
+createHeader();
+
+const main = document.createElement("main");
+body.appendChild(main);
+
+const container = document.createElement("section");
+container.classList.add("container");
+main.appendChild(container);
+
+fetch("http://127.0.0.1:5500/api/recipes.json")
+  .then((response) => response.json())
+  .then((data) => {
+    cardsContainer(data);
+    filtersContainer(data);
+    showTotalRecipes(data);
+  });
 
 function createHeader() {
   const header = document.createElement("header");
@@ -41,29 +62,57 @@ function createHeader() {
 
   header.appendChild(searchBarContainer);
 
-  return header;
+  body.appendChild(header);
 }
 
-function cardsContainer() {
+async function cardsContainer(fetchedData) {
+  const data = await fetchedData;
   const container = document.createElement("div");
   container.classList.add("cards-container");
 
-  fetch("http://127.0.0.1:5500/api/recipes.json")
-    .then((response) => response.json())
-    .then((data) => {
-      data.forEach((element) => {
-        console.log(element);
-        container.appendChild(
-          Card(element.image,element.name, element.description, element.ingredients, element.time)
-        );
-      });
-    });
+  data.forEach((element) => {
+    container.appendChild(
+      Card(
+        element.image,
+        element.name,
+        element.description,
+        element.ingredients,
+        element.time
+      )
+    );
+  });
 
-  return container;
+  main.appendChild(container);
 }
-body.appendChild(createHeader());
 
-const main = document.createElement("main");
-body.appendChild(main);
+async function filtersContainer(fetchedData) {
+  const data = await fetchedData;
+  const filter = document.createElement("div");
+  filter.classList.add("filters-container");
 
-main.appendChild(cardsContainer());
+  filter.appendChild(Filter(getIngredients(data), "Ingrédients"));
+  filter.appendChild(Filter(getAppliance(data), "Appareils"));
+  filter.appendChild(Filter(getUstensils(data), "Ustensiles"));
+  // getIngredients(data);
+  // getAppliance(data);
+  // getUstensils(data);
+
+  // console.log("ingredients", getIngredients(data));
+  // console.log("appliance", getAppliance(data));
+  // console.log("ustensils", getUstensils(data));
+
+  container.appendChild(filter);
+}
+
+async function showTotalRecipes(fetchedData) {
+  const data = await fetchedData;
+  const total = document.createElement("span");
+  total.classList.add("total-recipes");
+  total.innerHTML = `${data.length} recettes`;
+
+  container.appendChild(total);
+}
+
+// container.appendChild(filtersContainer());
+
+// main.appendChild(cardsContainer());

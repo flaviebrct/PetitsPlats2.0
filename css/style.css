@@ -1,4 +1,5 @@
 @import url("card.css");
+@import url("dropdown.css");
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -40,6 +41,7 @@ header {
   height: 667px;
   display: flex;
   align-items: center;
+  margin-bottom: 21px;
   flex-direction: column;
   background-size: cover;
   justify-content: center;
@@ -105,4 +107,22 @@ header .searchbar-container button:hover {
   flex-wrap: wrap;
   gap: 48px;
   justify-content: center;
+  max-width: 1236px;
+  margin: auto;
+}
+
+/* ----- Filters & total recipe container -----  */
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1236px;
+  margin: auto;
+  margin-bottom: 55px;
+}
+
+.total-recipes {
+  color: var(--Black);
+  font-family: var(--font-anton);
+  font-size: 21px;
 }

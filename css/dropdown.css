@@ -1,0 +1,56 @@
+.filters-container{
+  display: flex;
+  align-items: baseline;
+  max-width: 692px;
+  gap: 66px;
+}
+
+.dropdown {
+
+}
+
+.dropdown .dropdown-toggle {
+  color: var(--black);
+  font-family: var(--font-manrope);
+  font-size: calc(16rem/16);
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  display: inline-flex;
+  padding: 17px 16px;
+  align-items: center;
+  gap: 63px;
+  border-radius: 11px;
+  background: #FFF;
+  border: none;
+}
+
+.dropdown .dropdown-toggle.open {
+}
+
+.dropdown .dropdown-toggle .arrow{
+  width: 13px;
+  height: 6px;
+}
+
+.dropdown .dropdown-toggle .arrow.open{
+}
+
+.dropdown .dropdown-list {
+}
+
+.dropdown .dropdown-list .listbox-item:first-of-type {
+
+}
+
+.dropdown .dropdown-list .listbox-item {
+
+}
+
+.dropdown .dropdown-list .listbox-item .arrow {
+
+}
+
+.hidden {
+  display: none;
+}
