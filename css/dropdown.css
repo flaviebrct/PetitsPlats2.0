@@ -1,50 +1,96 @@
 .filters-container{
   display: flex;
   align-items: baseline;
-  max-width: 692px;
+  max-width: 750px;
   gap: 66px;
 }
 
 .dropdown {
+  width: 195px;
+  background: #FFF;
+  border-radius: 11px;
+  overflow: hidden;
+  color: var(--black);
+  font-family: var(--font-manrope);
+}
 
+.dropdown.open {
+  border-radius: 11px 11px 0 0;
 }
 
 .dropdown .dropdown-toggle {
-  color: var(--black);
+  padding: 17px 16px;
   font-family: var(--font-manrope);
   font-size: calc(16rem/16);
-  font-style: normal;
   font-weight: 500;
-  line-height: normal;
   display: inline-flex;
-  padding: 17px 16px;
   align-items: center;
   gap: 63px;
-  border-radius: 11px;
-  background: #FFF;
+  background: var(--white);
   border: none;
+  width: 100%;
 }
 
 .dropdown .dropdown-toggle.open {
 }
 
-.dropdown .dropdown-toggle .arrow{
-  width: 13px;
-  height: 6px;
-}
-
 .dropdown .dropdown-toggle .arrow.open{
+  transform: rotate(180deg);
 }
 
 .dropdown .dropdown-list {
+  padding: 0px;
+  max-height: 268px;
+  font-size: calc(14rem/16);
+  font-weight: 400;
+  padding: 0 16px;
+  background: var(--white);
+  position: absolute;
+  z-index: 1;
+  width: 195px;
+  border-radius: 0 0 11px 11px;
 }
 
-.dropdown .dropdown-list .listbox-item:first-of-type {
+.dropdown .dropdown-list ul {
+  overflow: scroll;
+  overflow-x: hidden;
+  height: 200px;
+}
 
+/* scrollbar width */
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+.dropdown .dropdown-list .dropdown-button {
+  border-radius: 2px;
+  border: 1px solid #C6C6C6;
+  margin-bottom: 24px;
+  width: 100%;
+  height: 36px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: var(--white);
+  padding: 0;
+  gap: 5px;
+}
+
+.dropdown .dropdown-list .dropdown-button input {
+  width: 90%;
+  height: 34px;
+  border: 0px;
+}
+
+.dropdown .dropdown-list .dropdown-button .search-icon {
+  height: 14px;
+  color: pink;
+  padding-right: 10px ;
 }
 
 .dropdown .dropdown-list .listbox-item {
-
+  list-style: none;
+  margin-bottom: 13px;
 }
 
 .dropdown .dropdown-list .listbox-item .arrow {

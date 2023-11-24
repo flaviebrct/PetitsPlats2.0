@@ -15,12 +15,16 @@ const container = document.createElement("section");
 container.classList.add("container");
 main.appendChild(container);
 
+const filter = document.createElement("div");
+filter.classList.add("filters-container");
+
 fetch("http://127.0.0.1:5500/api/recipes.json")
   .then((response) => response.json())
   .then((data) => {
     cardsContainer(data);
     filtersContainer(data);
     showTotalRecipes(data);
+    sort(data);
   });
 
 function createHeader() {
@@ -87,21 +91,69 @@ async function cardsContainer(fetchedData) {
 
 async function filtersContainer(fetchedData) {
   const data = await fetchedData;
-  const filter = document.createElement("div");
-  filter.classList.add("filters-container");
 
   filter.appendChild(Filter(getIngredients(data), "Ingrédients"));
   filter.appendChild(Filter(getAppliance(data), "Appareils"));
   filter.appendChild(Filter(getUstensils(data), "Ustensiles"));
-  // getIngredients(data);
-  // getAppliance(data);
-  // getUstensils(data);
-
-  // console.log("ingredients", getIngredients(data));
-  // console.log("appliance", getAppliance(data));
-  // console.log("ustensils", getUstensils(data));
 
   container.appendChild(filter);
+}
+
+async function sort(fetchedData) {
+  const data = await fetchedData;
+  let allDropdownsInputs = Array.from(
+    document.getElementsByClassName("dropdown-input")
+  );
+  const listResult = document.querySelectorAll(".dropdown-list ul");
+
+  allDropdownsInputs.forEach((dropdown, index) => {
+    dropdown.addEventListener("keyup", () => {
+      if (index === 0) {
+        handleSearch(getIngredients(data), dropdown.value, index);
+      } else if (index === 1) {
+        handleSearch(getAppliance(data), dropdown.value, index);
+      } else if (index === 2) {
+        handleSearch(getUstensils(data), dropdown.value, index);
+      }
+    });
+  });
+
+  function handleSearch(arr, searchInput, index) {
+    const filteredData = arr.filter((value) => {
+      const searchText = searchInput.toLowerCase();
+      const result = value.toLowerCase().includes(searchText);
+      return result;
+    });
+
+    const updateList = (index, data) => {
+      data.forEach((value) => {
+        const listItem = document.createElement("li");
+        listItem.classList.add("listbox-item");
+        listItem.innerHTML = `${value}`;
+        listResult[index].appendChild(listItem);
+      });
+    };
+
+    if (searchInput.length > 2) {
+      listResult[index].innerHTML = "";
+
+      if (index === 0) {
+        updateList(index, filteredData);
+      } else if (index === 1) {
+        updateList(index, filteredData);
+      } else if (index === 2) {
+        updateList(index, filteredData);
+      }
+    } else {
+      if (index === 0) {
+        updateList(index, arr);
+      } else if (index === 1) {
+        updateList(index, arr);
+      } else if (index === 2) {
+        updateList(index, arr);
+      }
+    }
+  }
 }
 
 async function showTotalRecipes(fetchedData) {
@@ -112,7 +164,3 @@ async function showTotalRecipes(fetchedData) {
 
   container.appendChild(total);
 }
-
-// container.appendChild(filtersContainer());
-
-// main.appendChild(cardsContainer());
