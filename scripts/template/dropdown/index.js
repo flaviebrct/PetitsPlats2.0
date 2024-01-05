@@ -1,4 +1,4 @@
-function Filter(data, typeOfData) {
+function Filter(data, typeOfData, selectedFilter) {
   const dropdownContainer = document.createElement("div");
   dropdownContainer.classList.add("dropdown");
 
@@ -26,13 +26,14 @@ function Filter(data, typeOfData) {
   dropdownDataContainer.setAttribute("aria-expanded", "false");
 
   const dropdownList = document.createElement("ul");
+  dropdownList.classList.add("dropdown-ul")
 
-  const dropdownInputContainer = document.createElement("button");
-  dropdownInputContainer.classList.add("dropdown-button");
+  const dropdownInputContainer = document.createElement("div");
+  dropdownInputContainer.classList.add("dropdown-input-container");
 
   const dropdownInput = document.createElement("input");
   dropdownInput.setAttribute("type", "text");
-  dropdownInput.classList.add("dropdown-input")
+  dropdownInput.classList.add("dropdown-input");
 
   const searchIcon = document.createElement("img");
   searchIcon.classList.add("search-icon");
@@ -67,23 +68,9 @@ function Filter(data, typeOfData) {
   // Event listener that open the dropdown by clicking
   button.addEventListener("click", openDropDown);
 
-  // dropdownInput.addEventListener("keyup", () => {
-  //   if (dropdownInput.value.length < 3) {
-  //     return;
-  //   }
-  //   console.log(dropdownInput.value);
-  //   handleSearch(data, dropdownInput.value);
-  // });
-
-  // function handleSearch(arr, searchInput) {
-  //   const filteredData = arr.filter((value) => {
-  //     const searchText = searchInput.toLowerCase();
-  //     const result = value.toLowerCase().includes(searchText);
-
-  //     return result;
-  //   });
-  //   console.log(filteredData);
-  // }
+  if(selectedFilter) {
+    console.log("it's working", selectedFilter);
+  }
 
   return dropdownContainer;
 }

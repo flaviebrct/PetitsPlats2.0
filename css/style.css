@@ -127,3 +127,16 @@ header .searchbar-container button:hover {
   font-family: var(--font-anton);
   font-size: 21px;
 }
+
+.tags-container {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.tags-container span {
+  background-color: var(--yellow);
+  padding: 17px 18px;
+  align-items: center;
+  border-radius: 10px;
+}

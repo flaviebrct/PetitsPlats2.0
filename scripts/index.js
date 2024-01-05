@@ -1,5 +1,6 @@
 import Card from "./template/card/index.js";
 import Filter from "./template/dropdown/index.js";
+import SelectedTag from "./template/SelectedTag/index.js";
 import getIngredients from "./utils/filtersList/ingredients.js";
 import getAppliance from "./utils/filtersList/appliance.js";
 import getUstensils from "./utils/filtersList/ustensils.js";
@@ -18,12 +19,19 @@ main.appendChild(container);
 const filter = document.createElement("div");
 filter.classList.add("filters-container");
 
+const tagsContainer = document.createElement("div");
+tagsContainer.classList.add("tags-container");
+main.appendChild(tagsContainer);
+
+const selectedFilter = [];
+
 fetch("http://127.0.0.1:5500/api/recipes.json")
   .then((response) => response.json())
   .then((data) => {
-    cardsContainer(data);
     filtersContainer(data);
+    isSelectedFilter(data);
     showTotalRecipes(data);
+    cardsContainer(data);
     sort(data);
   });
 
@@ -71,7 +79,7 @@ function createHeader() {
 
 async function cardsContainer(fetchedData) {
   const data = await fetchedData;
-  const container = document.createElement("div");
+  const container = document.createElement("section");
   container.classList.add("cards-container");
 
   data.forEach((element) => {
@@ -92,11 +100,18 @@ async function cardsContainer(fetchedData) {
 async function filtersContainer(fetchedData) {
   const data = await fetchedData;
 
-  filter.appendChild(Filter(getIngredients(data), "Ingrédients"));
-  filter.appendChild(Filter(getAppliance(data), "Appareils"));
-  filter.appendChild(Filter(getUstensils(data), "Ustensiles"));
+  filter.appendChild(
+    Filter(getIngredients(data), "Ingrédients"),
+    selectedFilter
+  );
+  filter.appendChild(Filter(getAppliance(data), "Appareils"), selectedFilter);
+  filter.appendChild(Filter(getUstensils(data), "Ustensiles"), selectedFilter);
 
   container.appendChild(filter);
+}
+
+async function tagContainer(selectedFilter) {
+  SelectedTag(selectedFilter);
 }
 
 async function sort(fetchedData) {
@@ -104,7 +119,8 @@ async function sort(fetchedData) {
   let allDropdownsInputs = Array.from(
     document.getElementsByClassName("dropdown-input")
   );
-  const listResult = document.querySelectorAll(".dropdown-list ul");
+
+  const listResult = document.querySelectorAll(".dropdown-ul");
 
   allDropdownsInputs.forEach((dropdown, index) => {
     dropdown.addEventListener("keyup", () => {
@@ -163,4 +179,58 @@ async function showTotalRecipes(fetchedData) {
   total.innerHTML = `${data.length} recettes`;
 
   container.appendChild(total);
+}
+
+async function isSelectedFilter(fetchedData) {
+  const data = await fetchedData;
+  const listResult = document.querySelectorAll(".dropdown-ul");
+
+  const toggle = Array.from(document.querySelectorAll(".dropdown-toggle"));
+
+  const updateList = (index, data) => {
+    data.forEach((value) => {
+      const listItem = document.createElement("li");
+      listItem.classList.add("listbox-item");
+      listItem.innerHTML = `${value}`;
+      listResult[index].appendChild(listItem);
+    });
+  };
+
+  toggle.forEach((el, index) => {
+    el.addEventListener("click", () => {
+      listResult[index].childNodes.forEach((child) => {
+        child.addEventListener("click", () => {
+          console.log("cliqué sur", "=>", child.innerHTML);
+
+          // Appareils
+          if (!selectedFilter.includes(child.innerHTML.toLowerCase())) {
+            selectedFilter.push(child.innerHTML.toLowerCase());
+            child.classList.add("selected");
+            tagContainer(selectedFilter);
+          } else {
+            return;
+          }
+
+          listResult[index].innerHTML = "";
+
+          if (index === 0) {
+            const newList = getIngredients(data).filter((value) => {
+              return value != child.innerHTML;
+            });
+            updateList(index, newList);
+          } else if (index === 1) {
+            const newList = getAppliance(data).filter((value) => {
+              return value != child.innerHTML;
+            });
+            updateList(index, newList);
+          } else if (index === 2) {
+            const newList = getUstensils(data).filter((value) => {
+              return value != child.innerHTML;
+            });
+            updateList(index, newList);
+          }
+        });
+      });
+    });
+  });
 }
