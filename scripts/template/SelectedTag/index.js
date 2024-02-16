@@ -1,16 +1,16 @@
-export default function SelectedTag(tags) {
+export default async function SelectedTag(tagId, element) {
   const tagContainer = document.querySelector(".tags-container");
-  const tagElement = document.querySelectorAll(".tag");
 
-  if (tagElement != null) {
-    tagContainer.innerHTML = "";
-  }
-
-  tags.forEach((element) => {
     const tag = document.createElement("span");
     tag.classList.add("tag");
     tag.innerHTML = element;
+    tag.setAttribute("id", tagId);
     tagContainer.appendChild(tag);
-  });
+    const crossIcon = document.createElement("img");
+    crossIcon.classList.add("cross-icon");
+    crossIcon.setAttribute("src", "./assets/icons/cross.svg");
+    tag.appendChild(crossIcon);
+
+
   return tagContainer;
 }

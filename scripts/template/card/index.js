@@ -1,4 +1,4 @@
-function Card(imageLink, title, recipe, ingredients, timer) {
+function createCard(imageLink, title, recipe, ingredients, timer) {
   const card = document.createElement("article");
   card.classList.add("card");
 
@@ -56,7 +56,6 @@ function Card(imageLink, title, recipe, ingredients, timer) {
     element.unit
       ? ingredientQuantity.insertAdjacentHTML("beforeend", element.unit)
       : null;
-    // ingredientQuantity.innerHTML = `${element.quantity ? element.quantity : ""} ${element.unit ? element.unit : ""}`;
     ingredientItem.appendChild(ingredientQuantity);
 
     ingredientsList.appendChild(ingredientItem);
@@ -75,4 +74,4 @@ function Card(imageLink, title, recipe, ingredients, timer) {
   return card;
 }
 
-export default Card;
+export default createCard;

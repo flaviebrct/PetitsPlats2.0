@@ -1,90 +1,27 @@
-import Card from "./template/card/index.js";
-import Filter from "./template/dropdown/index.js";
-import SelectedTag from "./template/SelectedTag/index.js";
-import getIngredients from "./utils/filtersList/ingredients.js";
+import createCard from "./template/card/index.js";
+import createDropdown from "./template/dropdown/index.js";
+
+import utils from "./utils/tags/index.js";
 import getAppliance from "./utils/filtersList/appliance.js";
 import getUstensils from "./utils/filtersList/ustensils.js";
-
-const body = document.querySelector("body");
-
-createHeader();
-
-const main = document.createElement("main");
-body.appendChild(main);
-
-const container = document.createElement("section");
-container.classList.add("container");
-main.appendChild(container);
-
-const filter = document.createElement("div");
-filter.classList.add("filters-container");
-
-const tagsContainer = document.createElement("div");
-tagsContainer.classList.add("tags-container");
-main.appendChild(tagsContainer);
-
-const selectedFilter = [];
+import getIngredients from "./utils/filtersList/ingredients.js";
 
 fetch("http://127.0.0.1:5500/api/recipes.json")
   .then((response) => response.json())
   .then((data) => {
-    filtersContainer(data);
-    isSelectedFilter(data);
+    addDropdowns(data);
     showTotalRecipes(data);
-    cardsContainer(data);
-    sort(data);
+    addCards(data);
+    utils.addTag(data);
   });
 
-function createHeader() {
-  const header = document.createElement("header");
-  const logo = document.createElement("img");
-  logo.classList.add("logo");
-  logo.setAttribute("src", "./assets/logo.svg");
-  logo.setAttribute("alt", "logo du site 'Petits Plats'");
-
-  header.appendChild(logo);
-
-  const title = document.createElement("h1");
-  title.classList.add("title");
-  title.innerHTML =
-    "CHERCHEZ PARMI PLUS DE 1500 RECETTES DU QUOTIDIEN,SIMPLES ET DÉLICIEUSES";
-
-  header.appendChild(title);
-
-  const searchBarContainer = document.createElement("div");
-  searchBarContainer.classList.add("searchbar-container");
-
-  const searchBar = document.createElement("input");
-  searchBar.setAttribute(
-    "placeholder",
-    "Rechercher une recette, un ingrédient, ..."
-  );
-  searchBar.classList.add("searchbar");
-
-  const searchButton = document.createElement("button");
-
-  const searchIcon = document.createElement("img");
-  searchIcon.setAttribute("src", "./assets/icons/search.svg");
-  searchIcon.setAttribute("alt", "bouton permetant de lancer la recherche");
-
-  searchButton.appendChild(searchIcon);
-
-  searchBarContainer.appendChild(searchBar);
-  searchBarContainer.appendChild(searchButton);
-
-  header.appendChild(searchBarContainer);
-
-  body.appendChild(header);
-}
-
-async function cardsContainer(fetchedData) {
+async function addCards(fetchedData) {
   const data = await fetchedData;
-  const container = document.createElement("section");
-  container.classList.add("cards-container");
+  const container = document.querySelector(".cards-container");
 
   data.forEach((element) => {
     container.appendChild(
-      Card(
+      createCard(
         element.image,
         element.name,
         element.description,
@@ -93,144 +30,81 @@ async function cardsContainer(fetchedData) {
       )
     );
   });
-
-  main.appendChild(container);
 }
 
-async function filtersContainer(fetchedData) {
+async function addDropdowns(fetchedData) {
   const data = await fetchedData;
+  const filtersContainer = document.querySelector(".filters-container");
 
-  filter.appendChild(
-    Filter(getIngredients(data), "Ingrédients"),
-    selectedFilter
+  filtersContainer.appendChild(
+    createDropdown(getIngredients(data), "Ingrédients")
   );
-  filter.appendChild(Filter(getAppliance(data), "Appareils"), selectedFilter);
-  filter.appendChild(Filter(getUstensils(data), "Ustensiles"), selectedFilter);
-
-  container.appendChild(filter);
-}
-
-async function tagContainer(selectedFilter) {
-  SelectedTag(selectedFilter);
-}
-
-async function sort(fetchedData) {
-  const data = await fetchedData;
-  let allDropdownsInputs = Array.from(
-    document.getElementsByClassName("dropdown-input")
+  filtersContainer.appendChild(createDropdown(getAppliance(data), "Appareils"));
+  filtersContainer.appendChild(
+    createDropdown(getUstensils(data), "Ustensiles")
   );
-
-  const listResult = document.querySelectorAll(".dropdown-ul");
-
-  allDropdownsInputs.forEach((dropdown, index) => {
-    dropdown.addEventListener("keyup", () => {
-      if (index === 0) {
-        handleSearch(getIngredients(data), dropdown.value, index);
-      } else if (index === 1) {
-        handleSearch(getAppliance(data), dropdown.value, index);
-      } else if (index === 2) {
-        handleSearch(getUstensils(data), dropdown.value, index);
-      }
-    });
-  });
-
-  function handleSearch(arr, searchInput, index) {
-    const filteredData = arr.filter((value) => {
-      const searchText = searchInput.toLowerCase();
-      const result = value.toLowerCase().includes(searchText);
-      return result;
-    });
-
-    const updateList = (index, data) => {
-      data.forEach((value) => {
-        const listItem = document.createElement("li");
-        listItem.classList.add("listbox-item");
-        listItem.innerHTML = `${value}`;
-        listResult[index].appendChild(listItem);
-      });
-    };
-
-    if (searchInput.length > 2) {
-      listResult[index].innerHTML = "";
-
-      if (index === 0) {
-        updateList(index, filteredData);
-      } else if (index === 1) {
-        updateList(index, filteredData);
-      } else if (index === 2) {
-        updateList(index, filteredData);
-      }
-    } else {
-      if (index === 0) {
-        updateList(index, arr);
-      } else if (index === 1) {
-        updateList(index, arr);
-      } else if (index === 2) {
-        updateList(index, arr);
-      }
-    }
-  }
 }
+
+// async function sort(fetchedData) {
+//   const data = await fetchedData;
+//   let allDropdownsInputs = Array.from(
+//     document.getElementsByClassName("dropdown-input")
+//   );
+
+//   const listResult = document.querySelectorAll(".dropdown-ul");
+
+//   allDropdownsInputs.forEach((dropdown, index) => {
+//     dropdown.addEventListener("keyup", () => {
+//       if (index === 0) {
+//         handleSearch(getIngredients(data), dropdown.value, index);
+//       } else if (index === 1) {
+//         handleSearch(getAppliance(data), dropdown.value, index);
+//       } else if (index === 2) {
+//         handleSearch(getUstensils(data), dropdown.value, index);
+//       }
+//     });
+//   });
+
+//   function handleSearch(arr, searchInput, index) {
+//     const filteredData = arr.filter((value) => {
+//       const searchText = searchInput.toLowerCase();
+//       const result = value.toLowerCase().includes(searchText);
+//       return result;
+//     });
+
+//     const updateList = (index, data) => {
+//       data.forEach((value) => {
+//         const listItem = document.createElement("li");
+//         listItem.classList.add("listbox-item");
+//         listItem.innerHTML = `${value}`;
+//         listResult[index].appendChild(listItem);
+//       });
+//     };
+
+//     if (searchInput.length > 2) {
+//       listResult[index].innerHTML = "";
+
+//       if (index === 0) {
+//         updateList(index, filteredData);
+//       } else if (index === 1) {
+//         updateList(index, filteredData);
+//       } else if (index === 2) {
+//         updateList(index, filteredData);
+//       }
+//     } else {
+//       if (index === 0) {
+//         updateList(index, arr);
+//       } else if (index === 1) {
+//         updateList(index, arr);
+//       } else if (index === 2) {
+//         updateList(index, arr);
+//       }
+//     }
+//   }
+// }
 
 async function showTotalRecipes(fetchedData) {
   const data = await fetchedData;
-  const total = document.createElement("span");
-  total.classList.add("total-recipes");
+  const total = document.querySelector(".total-recipes");
   total.innerHTML = `${data.length} recettes`;
-
-  container.appendChild(total);
-}
-
-async function isSelectedFilter(fetchedData) {
-  const data = await fetchedData;
-  const listResult = document.querySelectorAll(".dropdown-ul");
-
-  const toggle = Array.from(document.querySelectorAll(".dropdown-toggle"));
-
-  const updateList = (index, data) => {
-    data.forEach((value) => {
-      const listItem = document.createElement("li");
-      listItem.classList.add("listbox-item");
-      listItem.innerHTML = `${value}`;
-      listResult[index].appendChild(listItem);
-    });
-  };
-
-  toggle.forEach((el, index) => {
-    el.addEventListener("click", () => {
-      listResult[index].childNodes.forEach((child) => {
-        child.addEventListener("click", () => {
-          console.log("cliqué sur", "=>", child.innerHTML);
-
-          // Appareils
-          if (!selectedFilter.includes(child.innerHTML.toLowerCase())) {
-            selectedFilter.push(child.innerHTML.toLowerCase());
-            child.classList.add("selected");
-            tagContainer(selectedFilter);
-          } else {
-            return;
-          }
-
-          listResult[index].innerHTML = "";
-
-          if (index === 0) {
-            const newList = getIngredients(data).filter((value) => {
-              return value != child.innerHTML;
-            });
-            updateList(index, newList);
-          } else if (index === 1) {
-            const newList = getAppliance(data).filter((value) => {
-              return value != child.innerHTML;
-            });
-            updateList(index, newList);
-          } else if (index === 2) {
-            const newList = getUstensils(data).filter((value) => {
-              return value != child.innerHTML;
-            });
-            updateList(index, newList);
-          }
-        });
-      });
-    });
-  });
 }

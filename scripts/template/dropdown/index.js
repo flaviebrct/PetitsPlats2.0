@@ -1,4 +1,4 @@
-function Filter(data, typeOfData, selectedFilter) {
+function createDropdown(data, typeOfData) {
   const dropdownContainer = document.createElement("div");
   dropdownContainer.classList.add("dropdown");
 
@@ -26,7 +26,7 @@ function Filter(data, typeOfData, selectedFilter) {
   dropdownDataContainer.setAttribute("aria-expanded", "false");
 
   const dropdownList = document.createElement("ul");
-  dropdownList.classList.add("dropdown-ul")
+  dropdownList.classList.add("dropdown-ul");
 
   const dropdownInputContainer = document.createElement("div");
   dropdownInputContainer.classList.add("dropdown-input-container");
@@ -50,6 +50,10 @@ function Filter(data, typeOfData, selectedFilter) {
   data.forEach((value) => {
     const listItem = document.createElement("li");
     listItem.classList.add("listbox-item");
+    listItem.setAttribute(
+      "id",
+      data.indexOf(value) + "-" + value.split(" ")[0]
+    );
     listItem.innerHTML = `${value}`;
     dropdownList.appendChild(listItem);
   });
@@ -68,11 +72,11 @@ function Filter(data, typeOfData, selectedFilter) {
   // Event listener that open the dropdown by clicking
   button.addEventListener("click", openDropDown);
 
-  if(selectedFilter) {
-    console.log("it's working", selectedFilter);
-  }
+  // if(selectedFilter) {
+  //   console.log("it's working", selectedFilter);
+  // }
 
   return dropdownContainer;
 }
 
-export default Filter;
+export default createDropdown;

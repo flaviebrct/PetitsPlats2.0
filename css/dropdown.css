@@ -94,6 +94,10 @@
   background-color: var(--yellow);
 }
 
+.dropdown .dropdown-list .listbox-item.selected:hover::after {
+  
+}
+
 .hidden {
   display: none;
 }

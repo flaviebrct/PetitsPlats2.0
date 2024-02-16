@@ -2,18 +2,38 @@
 <html lang="fr">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css">
-    <title>Petits Plats</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./css/style.css">
+  <title>Petits Plats</title>
 </head>
 
 <body>
-    <script src="./scripts/index.js" type="module"></script>
+  <header>
+    <img src="./assets/Logo.svg" alt="logo du site 'Petits Plats'" class="logo">
+    <h1 class="title">Cherchez parmi plus de 1500 recettes du quotidien, simples et délicieuses</h1>
+    <div class="searchbar-container">
+      <input type="text" class="searchbar" placeholder="Rechercher une recette, un ingrédient, ..">
+      <button>
+        <img src="./assets/icons/search.svg" alt="bouton permetant de lancer la recherche">
+      </button>
+    </div>
+  </header>
+
+  <main class="from-html">
+    <section class="container">
+      <div class="filters-container"></div>
+      <span class="total-recipes"></span>
+    </section>
+    <div class="tags-container"></div>
+    <section class="cards-container"></section>
+  </main>
+
+  <script src="./scripts/index.js" type="module"></script>
 </body>
 
 </html>
