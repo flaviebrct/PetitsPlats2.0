@@ -1,11 +1,12 @@
 import SelectedTag from "../../template/SelectedTag/index.js";
 
-const selectedFilter = [];
+import handleTag from "../dropdown/index.js";
 
+const selectedFilter = [];
 async function addTag(fetchedData) {
   await fetchedData;
-  const listResult = document.querySelectorAll(".dropdown-ul");
 
+  const listResult = document.querySelectorAll(".dropdown-ul");
   const toggle = document.querySelectorAll(".dropdown-toggle");
 
   toggle.forEach((el, index) => {
@@ -18,41 +19,52 @@ async function addTag(fetchedData) {
 function listenOnChildren(currentDropdown) {
   currentDropdown.childNodes.forEach((child) => {
     child.addEventListener("click", () => {
-      tagClicked(child);
+      filterClicked(child, currentDropdown);
     });
   });
 }
 
-function tagClicked(child) {
-  if (!selectedFilter.includes(child.innerHTML.toLowerCase())) {
-    selectedFilter.push(child.innerHTML.toLowerCase());
-    child.classList.add("selected");
-    SelectedTag(child.id, child.innerHTML);
-  } else {
-    return;
+function filterClicked(child, currentDropdown) {
+  if (!selectedFilter.includes(child.innerText)) {
+    selectedFilter.push(child.innerText);
+    const capitalizedChild = child.innerText.replace(
+      child.innerText.charAt(0),
+      child.innerText.charAt(0).toUpperCase()
+    );
+    currentDropdown.removeChild(child);
+    SelectedTag(child.dataset.id, capitalizedChild);
+    handleTag.selectedElement(child.dataset.id, child, currentDropdown, "add");
   }
-  
+  loopOnTags(child, currentDropdown);
+}
+
+function loopOnTags(child, currentDropdown) {
   const tags = document.querySelectorAll(".tag");
   for (let i = 0; i < tags.length; i++) {
-    if (tags[i].id === child.id) {
-      listenOnTag(tags[i], child);
+    if (tags[i].dataset.id === child.dataset.id) {
+      listenOnTag(tags[i], child, currentDropdown);
       break;
     }
   }
 }
 
-function listenOnTag(tag, child) {
+function listenOnTag(tag, child, currentDropdown) {
   tag.addEventListener("click", () => {
-    removeTag(tag, child);
+    removeTag(tag, child, currentDropdown);
   });
 }
 
-function removeTag(tag, child) {
+function removeTag(tag, child, currentDropdown) {
   for (let i = 0; i < selectedFilter.length; i++) {
     if (selectedFilter[i] === child.innerText) {
       selectedFilter.splice(i, 1);
-      const tagContainer = document.querySelector(".tags-container");
-      tagContainer.removeChild(tag);
+      handleTag.selectedElement(
+        child.dataset.id,
+        child,
+        currentDropdown,
+        "remove",
+        tag
+      );
     }
   }
 }

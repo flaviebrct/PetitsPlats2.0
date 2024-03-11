@@ -1,3 +1,5 @@
+import dropdownUtils from "../../utils/dropdown/index.js";
+
 function createDropdown(data, typeOfData) {
   const dropdownContainer = document.createElement("div");
   dropdownContainer.classList.add("dropdown");
@@ -25,6 +27,9 @@ function createDropdown(data, typeOfData) {
   dropdownDataContainer.setAttribute("role", "listbox");
   dropdownDataContainer.setAttribute("aria-expanded", "false");
 
+  const dropdownSelected = document.createElement("ul");
+  dropdownSelected.classList.add("selected-ul");
+
   const dropdownList = document.createElement("ul");
   dropdownList.classList.add("dropdown-ul");
 
@@ -44,19 +49,10 @@ function createDropdown(data, typeOfData) {
   dropdownInputContainer.appendChild(searchIcon);
 
   dropdownDataContainer.appendChild(dropdownInputContainer);
+  dropdownDataContainer.appendChild(dropdownSelected);
   dropdownDataContainer.appendChild(dropdownList);
 
-  // Using a loop to create all the filters list items
-  data.forEach((value) => {
-    const listItem = document.createElement("li");
-    listItem.classList.add("listbox-item");
-    listItem.setAttribute(
-      "id",
-      data.indexOf(value) + "-" + value.split(" ")[0]
-    );
-    listItem.innerHTML = `${value}`;
-    dropdownList.appendChild(listItem);
-  });
+  createListItem(data, dropdownList);
 
   dropdownContainer.appendChild(button);
   dropdownContainer.appendChild(dropdownDataContainer);
@@ -72,11 +68,35 @@ function createDropdown(data, typeOfData) {
   // Event listener that open the dropdown by clicking
   button.addEventListener("click", openDropDown);
 
-  // if(selectedFilter) {
-  //   console.log("it's working", selectedFilter);
-  // }
+  dropdownInput.addEventListener("keyup", () =>
+    updateList(data, dropdownInput, dropdownList)
+  );
 
   return dropdownContainer;
+}
+
+function updateList(data, dropdownInput, dropdownList) {
+  const updatedList = dropdownUtils.search(data, dropdownInput.value);
+  console.log(updatedList);
+  createListItem(updatedList, dropdownList);
+}
+
+function createListItem(data, dropdownList) {
+
+  // Using a loop to create all the filters list items
+  data.forEach((value) => {
+    const dropdownListItem = document.createElement("li");
+    dropdownListItem.classList.add("listbox-item");
+    dropdownListItem.dataset.id =
+      data.indexOf(value) + "-" + value.split(" ")[0];
+    const capitalizedListItem = value.replace(
+      value.charAt(0),
+      value.charAt(0).toUpperCase()
+    );
+    dropdownListItem.innerHTML = capitalizedListItem;
+
+    dropdownList.appendChild(dropdownListItem);
+  });
 }
 
 export default createDropdown;
