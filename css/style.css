@@ -102,6 +102,11 @@ header .searchbar-container button:hover {
   background: var(--yellow);
 }
 
+.clean {
+  display: none;
+  cursor: pointer;
+}
+
 /* ----- Card Container ----- */
 .cards-container {
   display: flex;
@@ -156,4 +161,16 @@ header .searchbar-container button:hover {
 .tags-container span img {
   width: 10px;
   height: 10px;
+}
+
+/* ----- Error message when no recipies are displayed -----  */
+.error-message {
+  text-align: center;
+  padding: 2rem;
+  font-family: var(--font-manrope);
+  font-weight: 500;
+}
+
+.error-message span {
+  font-weight: 700;
 }

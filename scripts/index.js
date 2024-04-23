@@ -1,56 +1,50 @@
-import createCard from "./template/card/index.js";
-import createDropdown from "./template/dropdown/index.js";
+import renderCardsAndTotal from "./utils/render/cardsAndTotal.js";
+import { addDropdowns } from "./utils/render/dropdowns.js";
 
-import utils from "./utils/tags/index.js";
+import { listenOnDropdowns } from "./utils/tags/index.js";
+
+import { getData, getRecipeList, showTotalRecipes } from "./utils/getData.js";
+import { setupSearchInput } from "./utils/searchBar/index.js";
 import getAppliance from "./utils/filtersList/appliance.js";
-import getUstensils from "./utils/filtersList/ustensils.js";
 import getIngredients from "./utils/filtersList/ingredients.js";
+import getUstensils from "./utils/filtersList/ustensils.js";
 
+async function init() {
+  await getData();
+  const allRecipes = getRecipeList();
+  const searchInput = document.querySelector(".searchBar");
 
-
-fetch("http://127.0.0.1:5500/api/recipes.json")
-  .then((response) => response.json())
-  .then((data) => {
-    addDropdowns(data);
-    showTotalRecipes(data);
-    addCards(data);
-    utils.addTag(data);
-  });
-
-async function addCards(fetchedData) {
-  const data = await fetchedData;
-  const container = document.querySelector(".cards-container");
-
-  data.forEach((element) => {
-    container.appendChild(
-      createCard(
-        element.image,
-        element.name,
-        element.description,
-        element.ingredients,
-        element.time
-      )
-    );
-  });
+  renderCardsAndTotal(allRecipes, searchInput);
+  addDropdowns(allRecipes);
+  listenOnDropdowns(allRecipes);
+  setupSearchInput();
+  showTotalRecipes(allRecipes);
 }
+init();
 
-async function addDropdowns(fetchedData) {
-  const data = await fetchedData;
-  const filtersContainer = document.querySelector(".filters-container");
-
-  filtersContainer.appendChild(
-    createDropdown(getIngredients(data), "Ingrédients")
-  );
-  filtersContainer.appendChild(
-    createDropdown(getAppliance(data), "Appareils")
-  );
-  filtersContainer.appendChild(
-    createDropdown(getUstensils(data), "Ustensiles")
-  );
-}
-
-async function showTotalRecipes(fetchedData) {
-  const data = await fetchedData;
-  const total = document.querySelector(".total-recipes");
-  total.innerHTML = `${data.length} recettes`;
+export function getTags() {
+  const tagContainer = document.querySelector(".tags-container");
+  let tagsList = {
+    ingredients: [],
+    appliances: [],
+    ustensils: [],
+  };
+  tagContainer.childNodes.forEach((child) => {
+    if (
+      getIngredients(getRecipeList()).includes(child.innerText.toLowerCase())
+    ) {
+      tagsList.ingredients.push(child.innerText.toLowerCase());
+    } else if (
+      getAppliance(getRecipeList()).includes(child.innerText.toLowerCase())
+    ) {
+      tagsList.appliances.push(child.innerText.toLowerCase());
+    } else if (
+      getUstensils(getRecipeList()).includes(child.innerText.toLowerCase())
+    ) {
+      tagsList.ustensils.push(child.innerText.toLowerCase());
+    } else {
+      console.log("No recipie with this search, ingredient, appliance or ustensil.");
+    }
+  });
+  return tagsList;
 }

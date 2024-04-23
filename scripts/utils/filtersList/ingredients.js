@@ -6,19 +6,12 @@ function getIngredients(data) {
 
     if (typeof element === "object") {
       data.forEach((recipe) => {
-        // Ingredients
+        // Add all ingredients not include in the array
         recipe.ingredients.forEach((list) => {
           if (!ingredientsArray.includes(list.ingredient.toLowerCase())) {
             ingredientsArray.push(list.ingredient.toLowerCase());
           }
         });
-      });
-    }
-    if (typeof element === "string") {
-      data.forEach((ingredient) => {
-        if (!ingredientsArray.includes(ingredient)) {
-          ingredientsArray.push(ingredient);
-        }
       });
     }
   }

@@ -1,4 +1,14 @@
-function selectedElement(id, element, currentDropdown, key, tag) {
+import {
+  setRecipeList,
+  getAllRecipes,
+  setRecipListSearch,
+} from "../getData.js";
+
+import { updateRecipeList } from "../searchRecipies.js";
+
+import { getTags } from "../../index.js";
+
+function selectedElement(element, currentDropdown, key, tag) {
   const selectedUl = currentDropdown.previousSibling;
   switch (key) {
     case "add":
@@ -12,13 +22,19 @@ function selectedElement(id, element, currentDropdown, key, tag) {
       removeIcon.setAttribute("alt", "bouton permetant de retirer le tag");
       selectedLi.appendChild(removeIcon);
       selectedUl.appendChild(selectedLi);
-      handleClick(selectedUl, selectedLi, currentDropdown);
+      // Call the function that handle the click on the selected li
+      handleClick(selectedLi, currentDropdown);
+      // Update the recipie list
+      setRecipeList(getAllRecipes());
+      setRecipListSearch(getAllRecipes());
+      updateRecipeList(getAllRecipes(), getTags());
       break;
     case "remove":
+      // Remove the selected list item
       const elementRemove = document.querySelectorAll(".listbox-item.selected");
       elementRemove.forEach((el) => {
         if (el.innerText === element.innerText) {
-          removeFilter(selectedUl, el, currentDropdown, tag);
+          removeFilter(el, currentDropdown);
         }
       });
       break;
@@ -27,26 +43,33 @@ function selectedElement(id, element, currentDropdown, key, tag) {
   }
 }
 
-function handleClick(selectedUl, selectedLi, currentDropdown) {
+// Function that triggers the listener on the li added
+function handleClick(selectedLi, currentDropdown) {
   selectedLi.addEventListener("click", () => {
-    removeFilter(selectedUl, selectedLi, currentDropdown);
+    removeFilter(selectedLi, currentDropdown);
   });
 }
 
-function removeFilter(selectedUl, element, currentDropdown, tag) {
+// Function that remove the filter from the selected list
+function removeFilter(element, currentDropdown) {
+  // Remove the element from the selected list
   element.classList.remove("selected");
   const tagContainer = document.querySelector(".tags-container");
   const allTags = tagContainer.childNodes;
   allTags.forEach((child) => {
-    console.log(child.innerText);
-    console.log(element.innerText);
     if (child.innerText === element.innerText) {
+      // Remove the tag and re render the recipes list with the updated tag list
       tagContainer.removeChild(child);
+      setRecipeList(getAllRecipes());
+      setRecipListSearch(getAllRecipes());
+      updateRecipeList(getAllRecipes(), getTags());
     }
   });
+  // Returns the item to the main dropdown list
   currentDropdown.appendChild(element);
 }
 
+// Search function for the filters in the drop down
 function search(elements, value) {
   const filteredElements = () => {
     return elements.filter((el) =>

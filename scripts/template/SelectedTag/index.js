@@ -1,3 +1,4 @@
+// Create a span for the given element
 export default async function SelectedTag(tagId, element) {
   const tagContainer = document.querySelector(".tags-container");
   const tag = document.createElement("span");

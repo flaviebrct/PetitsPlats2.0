@@ -84,6 +84,11 @@
   border: 0px;
 }
 
+.dropdown .dropdown-list .dropdown-input-container .dropdownInput.clean {
+  width: 8px;
+  height: 8px;
+}
+
 .dropdown .dropdown-list .dropdown-input-container .search-icon {
   height: 14px;
   color: pink;
