@@ -1,26 +1,28 @@
 import renderCardsAndTotal from "./render/cardsAndTotal.js";
 
-import {
-  getAllRecipes,
-  setRecipListSearch,
-} from "./getData.js";
+import { getAllRecipes, setRecipListSearch } from "./getData.js";
 import { getTags } from "../index.js";
 
 // Function to search the recipie
 export function searchRecipes(searchTerm) {
   const searchTerms = searchTerm.toLowerCase().split(" ");
+  const allRecipies = getAllRecipes();
+  const findRecipie = [];
 
-  return getAllRecipes().filter((recipe) => {
+  for (let i = 0; i < allRecipies.length; i++) {
     if (
-      recipe.name.toLowerCase().includes(searchTerms) ||
-      recipe.description.toLowerCase().includes(searchTerms) ||
-      recipe.ingredients.some((ingredient) =>
+      allRecipies[i].name.toLowerCase().includes(searchTerms) ||
+      allRecipies[i].description.toLowerCase().includes(searchTerms) ||
+      allRecipies[i].ingredients.some((ingredient) =>
         ingredient.ingredient.toLowerCase().includes(searchTerms)
       )
     ) {
-      return true;
+      console.log(allRecipies[i].name.toLowerCase());
+      findRecipie.push(allRecipies[i]);
     }
-  });
+  }
+
+  return findRecipie;
 }
 
 // Function to update the recipies list
